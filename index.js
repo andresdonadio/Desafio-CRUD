@@ -2,8 +2,11 @@ const formularioDom = document.getElementById("formulario");
 const tituloDom = document.getElementById("inputTitulo");
 const notaDom = document.getElementById("inputNota");
 const tablaDom = document.getElementById("tabla");
-const json = localStorage.getItem("notas"); // Traer de localStorage el dato asociado a la key "notas".
-let notas = JSON.parse(json) || []; // Convertir datos de un string JSON a código JavaScript.
+const editarForm = document.getElementById("formularioEditar");
+const editarTituloInput = document.getElementById("editarTitulo");
+const editarNotaInput = document.getElementById("editarNota");
+const json = localStorage.getItem("notas");
+let notas = JSON.parse(json) || [];
 
 function generarID() {
   return "_" + Math.random().toString(36).substr(2, 9);
@@ -17,10 +20,10 @@ formularioDom.onsubmit = function (e) {
     nota: notaDom.value,
   };
   notas.push(nota);
-  const json = JSON.stringify(notas); // Convertir datos a un string JSON.
-  localStorage.setItem("notas", json); // Guardar en localStorage un dato asociado a la key "notas".
+  const json = JSON.stringify(notas);
+  localStorage.setItem("notas", json);
   mostrarNotas();
-  formularioDom.reset(); // reset limpia los campos del formulario.
+  formularioDom.reset();
 };
 
 function mostrarNotas() {
@@ -32,7 +35,9 @@ function mostrarNotas() {
               <td>${nota.titulo}</td>
               <td>${nota.nota}</td>
               <td>
-              <button onclick="mostrarDetalle('${nota.id}')" type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalDetalle">Ver detalle</button>
+              <button onclick="mostrarDetalle('${nota.id}')" type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalDetalle">Ver nota</button>
+              <button onclick="cargarModalEditar('${nota.id}')" type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
+              data-bs-target="#modalEditar">Editar</button>
               <button onclick="eliminarNota('${nota.id}')" class="btn btn-danger btn-sm">Eliminar</button>
               </td>
           </tr>
@@ -70,3 +75,34 @@ function mostrarDetalle(id) {
   `;
   detalleDiv.innerHTML = detallesNota;
 }
+
+function cargarModalEditar(id) {
+  const notaEncontrada = notas.find((nota) => nota.id === id);
+  editarTituloInput.value = notaEncontrada.titulo;
+  editarNotaInput.value = notaEncontrada.nota;
+  notaId = notaEncontrada.id;
+}
+
+editarForm.onsubmit = function editarNota(e) {
+  e.preventDefault();
+  const notasModificado = notas.map((nota) => {
+    if (nota.id === notaId) {
+      const notaModificada = {
+        ...nota,
+        titulo: editarTituloInput.value,
+        nota: editarNotaInput.value,
+      };
+      return notaModificada;
+    } else {
+      return nota;
+    }
+  });
+
+  const json = JSON.stringify(notasModificado);
+  localStorage.setItem("notas", json);
+  notas = notasModificado;
+  mostrarNotas();
+  const modalDiv = document.getElementById("modalEditar");
+  const modalBootstrap = bootstrap.Modal.getInstance(modalDiv);
+  modalBootstrap.hide();
+};

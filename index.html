@@ -71,7 +71,7 @@
       </table>
     </div>
 
-    <!-- Modal Detalle Usuario -->
+    <!-- Modal Detalle Nota -->
     <div
       class="modal fade"
       id="modalDetalle"
@@ -104,6 +104,29 @@
             </button>
           </div>
         </div>
+      </div>
+    </div>
+      <!-- Modal Editar Nota -->
+  <div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Editar nota</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="formularioEditar">
+          <div class="modal-body">
+            <label for="editarTitulo">Ingresar titulo</label>
+            <input type="text" id="editarTitulo" required>
+            <br>
+            <label for="editarNota">Ingresar nota</label>
+            <input type="text" id="editarNota" required>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" type="submit" >Enviar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </form>
       </div>
     </div>
 
