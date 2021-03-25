@@ -31,7 +31,9 @@ function mostrarNotas() {
           <tr>
               <td>${nota.titulo}</td>
               <td>${nota.nota}</td>
-              <td> <button onclick="eliminarNota('${nota.id}')" class="btn btn-danger btn-sm">Eliminar</button>
+              <td>
+              <button onclick="mostrarDetalle('${nota.id}')" type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalDetalle">Ver detalle</button>
+              <button onclick="eliminarNota('${nota.id}')" class="btn btn-danger btn-sm">Eliminar</button>
               </td>
           </tr>
       `;
@@ -56,4 +58,15 @@ function eliminarNota(id) {
   notas = notasFiltradas;
   console.log("Se eliminó exitosamente la nota. 👨‍💻");
   mostrarNotas();
+}
+
+function mostrarDetalle(id) {
+  const notaEncontrada = notas.find((nota) => nota.id === id);
+  const detalleDiv = document.getElementById("detalleNota");
+  const detallesNota = `
+      <p>Titulo: ${notaEncontrada.titulo}</p>
+      <p>Nota: ${notaEncontrada.nota}</p>
+
+  `;
+  detalleDiv.innerHTML = detallesNota;
 }
