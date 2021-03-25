@@ -3,7 +3,7 @@ const tituloDom = document.getElementById("inputTitulo");
 const notaDom = document.getElementById("inputNota");
 const tablaDom = document.getElementById("tabla");
 const json = localStorage.getItem("notas"); // Traer de localStorage el dato asociado a la key "notas".
-const notas = JSON.parse(json) || []; // Convertir datos de un string JSON a código JavaScript.
+let notas = JSON.parse(json) || []; // Convertir datos de un string JSON a código JavaScript.
 
 function generarID() {
   return "_" + Math.random().toString(36).substr(2, 9);
@@ -29,9 +29,10 @@ function mostrarNotas() {
     const nota = notas[i];
     const tr = `
           <tr>
-              <td>${nota.id}</td>
               <td>${nota.titulo}</td>
               <td>${nota.nota}</td>
+              <td> <button onclick="eliminarNota('${nota.id}')" class="btn btn-danger btn-sm">Eliminar</button>
+              </td>
           </tr>
       `;
     filas.push(tr);
@@ -40,3 +41,19 @@ function mostrarNotas() {
 }
 
 mostrarNotas();
+
+function eliminarNota(id) {
+  let notasFiltradas = [];
+  for (let i = 0; i < notas.length; i++) {
+    const nota = notas[i];
+    const coincideId = nota.id === id;
+    if (!coincideId) {
+      notasFiltradas.push(nota);
+    }
+  }
+  const json = JSON.stringify(notasFiltradas);
+  localStorage.setItem("notas", json);
+  notas = notasFiltradas;
+  console.log("Se eliminó exitosamente la nota. 👨‍💻");
+  mostrarNotas();
+}
