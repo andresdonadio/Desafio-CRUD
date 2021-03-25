@@ -5,6 +5,7 @@ const tablaDom = document.getElementById("tabla");
 const editarForm = document.getElementById("formularioEditar");
 const editarTituloInput = document.getElementById("editarTitulo");
 const editarNotaInput = document.getElementById("editarNota");
+const busquedaForm = document.getElementById("formBusqueda");
 const json = localStorage.getItem("notas");
 let notas = JSON.parse(json) || [];
 
@@ -105,4 +106,34 @@ editarForm.onsubmit = function editarNota(e) {
   const modalDiv = document.getElementById("modalEditar");
   const modalBootstrap = bootstrap.Modal.getInstance(modalDiv);
   modalBootstrap.hide();
+};
+
+busquedaForm.onsubmit = function busquedaNota(e) {
+  e.preventDefault();
+  const notasLocal = JSON.parse(localStorage.getItem("notas")) || [];
+  const busquedaInput = document.getElementById("busqueda");
+  const termino = busquedaInput.value.toLowerCase();
+  const notasFiltradas = notasLocal.filter((nota) => {
+    const tituloEnMinuscula = nota.titulo.toLowerCase();
+    const notaEnMinuscula = nota.nota.toLowerCase();
+    return (
+      tituloEnMinuscula.includes(termino) || notaEnMinuscula.includes(termino)
+    );
+  });
+  notas = notasFiltradas;
+  mostrarNotas();
+  const alerta = document.getElementById("alertaBusqueda");
+  if (notasFiltradas.length === 0) {
+    alerta.classList.remove("d-none");
+  } else {
+    alerta.classList.add("d-none");
+  }
+};
+
+const limpiarFiltro = () => {
+  notas = JSON.parse(localStorage.getItem("notas")) || [];
+  busquedaForm.reset();
+  mostrarNotas();
+  const alerta = document.getElementById("alertaBusqueda");
+  alerta.classList.add("d-none");
 };
